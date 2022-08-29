@@ -2,6 +2,7 @@ module com.vaxreact {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
+    requires com.jfoenix;
     //requires org.postgresql.jdbc;
 
 

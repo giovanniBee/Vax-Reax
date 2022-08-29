@@ -77,8 +77,8 @@ public class LoginController {
         try{
             Parent root = FXMLLoader.load(getClass().getResource("DoctorView.fxml"));
             Stage docStage = new Stage();
-            docStage.initStyle(StageStyle.UNDECORATED);
-            docStage.setScene(new Scene(root,520,400));
+            //docStage.initStyle(StageStyle.UNDECORATED);
+            docStage.setScene(new Scene(root,800,500));
             docStage.show();
         } catch (Exception e){
             e.printStackTrace();
@@ -92,8 +92,8 @@ public class LoginController {
         try{
             Parent root = FXMLLoader.load(getClass().getResource("FarmaView.fxml"));
             Stage farmaStage = new Stage();
-            farmaStage.initStyle(StageStyle.UNDECORATED);
-            farmaStage.setScene(new Scene(root,520,400));
+            //farmaStage.initStyle(StageStyle.UNDECORATED);
+            farmaStage.setScene(new Scene(root,800,500));
             farmaStage.show();
         } catch (Exception e){
             e.printStackTrace();
