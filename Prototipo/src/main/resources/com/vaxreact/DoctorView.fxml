@@ -1,30 +1,177 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="520.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vaxreact.DocController">
+<AnchorPane fx:id="stage" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vaxreact.DocController">
    <children>
-      <BorderPane layoutX="208.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane layoutX="114.0" layoutY="54.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <AnchorPane prefHeight="65.0" prefWidth="200.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
                <children>
-                  <Pane layoutX="77.0" layoutY="20.0" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #263F73;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <HBox layoutX="275.0" layoutY="1.0" prefHeight="43.0" prefWidth="525.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0" />
+                  <Pane layoutX="102.0" layoutY="20.0" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #263F73;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ImageView fx:id="exit" fitHeight="15.0" fitWidth="15.0" layoutX="777.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@exit.png" />
+                           </image>
+                        </ImageView>
+                     </children></Pane>
+                  <HBox layoutX="275.0" layoutY="1.0" prefHeight="43.0" prefWidth="525.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+                     <children>
+                        <JFXButton fx:id="reportHighButton" onAction="#reportHighButtonOnActon" prefHeight="40.0" prefWidth="136.0" ripplerFill="WHITE" style="-fx-background-color: WHITE;" text="Report" textFill="#554444">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@report5.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                        <JFXButton fx:id="viewPatientsHighButton" onAction="#viewPatientsHighButtonOnActon" prefHeight="40.0" prefWidth="136.0" ripplerFill="WHITE" style="-fx-background-color: WHITE;" text="View Patients" textFill="#554444">
+                           <graphic>
+                              <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@visualizza5a.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                        </JFXButton>
+                     </children></HBox>
+                  <Label fx:id="menu" layoutX="14.0" layoutY="30.0" prefHeight="20.0" prefWidth="82.0" text="MENU" textFill="#c3c3c3">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@menu.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
+                  <Label fx:id="menuBack" layoutX="14.0" layoutY="30.0" prefHeight="20.0" prefWidth="82.0" text="MENU" textFill="#c3c3c3">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                     <graphic>
+                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@menu.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Label>
                </children>
             </AnchorPane>
          </top>
          <left>
-            <AnchorPane prefHeight="362.0" prefWidth="176.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="slider" prefHeight="435.0" prefWidth="175.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
                <children>
-                  <VBox layoutX="24.0" layoutY="43.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="53.0" />
+                  <ImageView fitHeight="158.0" fitWidth="156.0" layoutX="10.0" layoutY="267.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@logo2.PNG" />
+                     </image>
+                  </ImageView>
+                  <JFXButton fx:id="reportButton" alignment="BASELINE_CENTER" layoutX="18.0" layoutY="73.0" onAction="#reportButtonOnAction" prefHeight="38.0" prefWidth="175.0" ripplerFill="WHITE" style="-fx-background-color: #263F73;" text="Report" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <JFXButton fx:id="viewPatientsButton" alignment="BASELINE_CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="175.0" onAction="#viewPatientsButtonOnAction" prefHeight="38.0" prefWidth="175.0" ripplerFill="WHITE" style="-fx-background-color: #263F73;" text="View patients" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font>
+                  </JFXButton>
+                  <ImageView fitHeight="71.0" fitWidth="30.0" layoutX="8.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@report4.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="8.0" layoutY="177.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@visualizza4.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
          </left>
+         <center>
+            <StackPane BorderPane.alignment="CENTER">
+               <children>
+                  <Pane fx:id="homePage" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="435.0" prefWidth="624.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to the doctor's page.From here you can manage the reports of adverse reactions to one or more vaccines from your patients.Click on Report to send an adverse reaction report.Click on Patients view to see the list of patients reported so far." textAlignment="JUSTIFY" textOrigin="CENTER" wrappingWidth="512.7832126617432" />
+                           </children>
+                        </VBox>
+                     </children></Pane>
+                  <Pane fx:id="patientsView" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="49.0" layoutY="32.0" text="Search" />
+                        <TextField layoutX="96.0" layoutY="29.0" promptText="Patients ID" />
+                        <TableView fx:id="patientTable" editable="true" layoutY="66.0" prefHeight="250.0" prefWidth="625.0">
+                          <columns>
+                            <TableColumn fx:id="IdColumn" prefWidth="125.0" text="Report ID" />
+                              <TableColumn prefWidth="125.0" text="Patient ID" />
+                              <TableColumn prefWidth="125.0" text="Adverse reaction" />
+                              <TableColumn prefWidth="125.0" text="Adv.reaction date" />
+                              <TableColumn prefWidth="125.0" text="Report date" />
+                              <TableColumn prefWidth="125.0" text="Vaccine history " />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                           <cursor>
+                              <Cursor fx:constant="DEFAULT" />
+                           </cursor>
+                        </TableView>
+                     </children>
+                  </Pane>
+                  <Pane fx:id="reportView" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutY="33.0" prefWidth="40.0" text="Search" />
+                        <TextField fx:id="patientIdTextField" layoutX="40.0" layoutY="29.0" prefHeight="26.0" prefWidth="100.0" />
+                        <TextField fx:id="riskFactorTextField" layoutX="196.0" layoutY="29.0" prefHeight="26.0" prefWidth="100.0" />
+                        <Label layoutX="156.0" layoutY="33.0" prefWidth="40.0" text="Search" />
+                        <TableView fx:id="patientIdTable" layoutY="66.0" prefHeight="250.0" prefWidth="156.25">
+                          <columns>
+                            <TableColumn fx:id="patientIdColumn" prefWidth="155.05000615119934" text="Patient ID" />
+                          </columns>
+                        </TableView>
+                        <TableView fx:id="adReactionTable" layoutX="312.5" layoutY="66.0" prefHeight="250.0" prefWidth="312.5">
+                          <columns>
+                            <TableColumn fx:id="adReactionColumn" prefWidth="156.25" text="Adverse Reaction" />
+                              <TableColumn fx:id="dateReactionColumn" minWidth="0.0" prefWidth="156.25" text="Date" />
+                          </columns>
+                        </TableView>
+                        <TableView fx:id="riskFactorTable" layoutX="156.25" layoutY="66.0" prefHeight="250.0" prefWidth="156.25">
+                          <columns>
+                            <TableColumn fx:id="riskFactorColumn" prefWidth="155.0500030517578" text="Risk factors" />
+                          </columns>
+                        </TableView>
+                        <Label layoutX="313.0" layoutY="33.0" prefWidth="40.0" text="Search" />
+                        <TextField fx:id="adReactionTextField" layoutX="353.0" layoutY="29.0" prefHeight="26.0" prefWidth="100.0" />
+                     </children>
+                  </Pane>
+               </children>
+            </StackPane>
+         </center>
       </BorderPane>
    </children>
 </AnchorPane>
