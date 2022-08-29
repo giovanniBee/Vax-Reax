@@ -9,9 +9,9 @@ public class DataBaseConnection {
     public Connection databaseLink;
 
     public Connection getConnection() {
-        String databaseName = "";
-        String databaseUser = "";
-        String databasePassword = "";
+        String databaseName = "Vaccini";
+        String databaseUser = "postgres";
+        String databasePassword = "robottino99";
         String url = "jdbc:postgresql://localhost:5432/" + databaseName;
 
         try {
