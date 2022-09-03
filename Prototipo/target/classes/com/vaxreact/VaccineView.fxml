@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vaxreact.VaccineController">
+   <children>
+      <TableView fx:id="vaccineTable" layoutY="46.0" prefHeight="354.0" prefWidth="600.0">
+        <columns>
+          <TableColumn fx:id="vaccineNameColumn" prefWidth="150.0" text="Vaccine" />
+          <TableColumn fx:id="typeColumn" prefWidth="150.0" text="Type" />
+            <TableColumn fx:id="localityColumn" prefWidth="150.0" text="Locality" />
+            <TableColumn fx:id="dateColumn" prefWidth="150.0" text="Date" />
+        </columns>
+      </TableView>
+      <Label alignment="CENTER" layoutX="13.0" layoutY="14.0" prefHeight="24.0" prefWidth="262.0" text="Vaccinazioni recenti ( entro i 2 mesi )">
+         <font>
+            <Font name="Century" size="14.0" />
+         </font>
+      </Label>
+      <TextField fx:id="vaccineDataTextField" layoutX="400.0" layoutY="13.0" prefHeight="25.0" prefWidth="125.0" promptText="Vaccine data" />
+      <Label layoutX="347.0" layoutY="17.0" prefHeight="17.0" prefWidth="53.0" text="Search :" />
+   </children>
+</AnchorPane>

@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -124,15 +125,14 @@
                   <Pane fx:id="patientsView" prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <Label layoutX="49.0" layoutY="32.0" text="Search" />
-                        <TextField layoutX="96.0" layoutY="29.0" promptText="Patients ID" />
-                        <TableView fx:id="patientTable" editable="true" layoutY="66.0" prefHeight="250.0" prefWidth="625.0">
+                        <TextField fx:id="patientViewTextField" layoutX="96.0" layoutY="29.0" promptText="Patients ID" />
+                        <TableView fx:id="patientViewTable" editable="true" layoutY="66.0" prefHeight="368.0" prefWidth="625.0">
                           <columns>
-                            <TableColumn fx:id="IdColumn" prefWidth="125.0" text="Report ID" />
-                              <TableColumn prefWidth="125.0" text="Patient ID" />
-                              <TableColumn prefWidth="125.0" text="Adverse reaction" />
-                              <TableColumn prefWidth="125.0" text="Adv.reaction date" />
-                              <TableColumn prefWidth="125.0" text="Report date" />
-                              <TableColumn prefWidth="125.0" text="Vaccine history " />
+                            <TableColumn fx:id="reportIdColumn" prefWidth="125.0" text="Report ID" />
+                              <TableColumn fx:id="patientIdPatientViewColumn" prefWidth="125.0" text="Patient ID" />
+                              <TableColumn fx:id="adverseReactionPatientViewColumn" prefWidth="125.0" text="Adverse reaction" />
+                              <TableColumn fx:id="adverseReactionDateColumn" prefWidth="125.0" text="Adv.reaction date" />
+                              <TableColumn fx:id="reportDateColumn" prefWidth="125.0" text="Report date" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -149,24 +149,33 @@
                         <TextField fx:id="patientIdTextField" layoutX="40.0" layoutY="29.0" prefHeight="26.0" prefWidth="100.0" />
                         <TextField fx:id="riskFactorTextField" layoutX="196.0" layoutY="29.0" prefHeight="26.0" prefWidth="100.0" />
                         <Label layoutX="156.0" layoutY="33.0" prefWidth="40.0" text="Search" />
-                        <TableView fx:id="patientIdTable" layoutY="66.0" prefHeight="250.0" prefWidth="156.25">
+                        <TableView fx:id="patientIdTable" layoutY="66.0" prefHeight="150.0" prefWidth="208.3">
                           <columns>
-                            <TableColumn fx:id="patientIdColumn" prefWidth="155.05000615119934" text="Patient ID" />
+                            <TableColumn fx:id="patientIdColumn" prefWidth="208.3" text="Patient ID" />
                           </columns>
                         </TableView>
-                        <TableView fx:id="adReactionTable" layoutX="312.5" layoutY="66.0" prefHeight="250.0" prefWidth="312.5">
+                        <TableView fx:id="adverseReactionTable" layoutX="416.7" layoutY="66.0" prefHeight="150.0" prefWidth="208.3">
                           <columns>
-                            <TableColumn fx:id="adReactionColumn" prefWidth="156.25" text="Adverse Reaction" />
-                              <TableColumn fx:id="dateReactionColumn" minWidth="0.0" prefWidth="156.25" text="Date" />
+                            <TableColumn fx:id="adverseReactionColumn" prefWidth="208.3" text="Adverse Reaction" />
                           </columns>
                         </TableView>
-                        <TableView fx:id="riskFactorTable" layoutX="156.25" layoutY="66.0" prefHeight="250.0" prefWidth="156.25">
+                        <TableView fx:id="riskFactorTable" layoutX="208.3" layoutY="66.0" prefHeight="150.0" prefWidth="208.3">
                           <columns>
-                            <TableColumn fx:id="riskFactorColumn" prefWidth="155.0500030517578" text="Risk factors" />
+                            <TableColumn fx:id="riskFactorColumn" prefWidth="208.3" text="Risk factors" />
                           </columns>
                         </TableView>
                         <Label layoutX="313.0" layoutY="33.0" prefWidth="40.0" text="Search" />
                         <TextField fx:id="adReactionTextField" layoutX="353.0" layoutY="29.0" prefHeight="26.0" prefWidth="100.0" />
+                        <Text fx:id="commitPatientID" fill="#5cd15e" layoutX="1.0" layoutY="240.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="190.38303565979004" />
+                        <Text fx:id="commitRiskFactor" fill="#5cd15e" layoutX="208.3" layoutY="240.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="190.38303565979004" />
+                        <Text fx:id="commitAdverseReaction" fill="#5cd15e" layoutX="416.7" layoutY="240.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="190.38303565979004" />
+                        <Button fx:id="sendReportButton" layoutX="498.0" layoutY="354.0" mnemonicParsing="false" onAction="#sendReportOnAction" style="-fx-background-color: #263F73;" text="Send report" textFill="WHITE" />
+                        <Label fx:id="checkCommitLabel" layoutX="7.0" layoutY="360.0" prefHeight="18.0" prefWidth="378.0" textFill="#c32f15">
+                           <font>
+                              <Font name="System Bold" size="13.0" />
+                           </font></Label>
+                        <TextField fx:id="commitAdReactionDate" layoutX="416.7" layoutY="290.0" promptText="YYYY-MM-DD " />
+                        <Label layoutX="417.0" layoutY="263.0" prefHeight="18.0" prefWidth="147.0" text="Adverse reaction date:" />
                      </children>
                   </Pane>
                </children>

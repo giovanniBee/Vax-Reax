@@ -1,0 +1,138 @@
+package com.vaxreact;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Text;
+import org.postgresql.util.PSQLException;
+
+import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ResourceBundle;
+
+public class VaccineController extends DocController implements Initializable {
+
+    @FXML
+    private TableView<VaccineModel> vaccineTable;
+
+    @FXML
+    private TableColumn<VaccineModel, String> dateColumn;
+
+    @FXML
+    private TableColumn<VaccineModel, String> localityColumn;
+
+    @FXML
+    private TableColumn<VaccineModel, String> typeColumn;
+
+    @FXML
+    private TableColumn<VaccineModel, String> vaccineNameColumn;
+
+    @FXML
+    private TextField vaccineDataTextField;
+
+    ObservableList<VaccineModel>vaccineModelObservableList = FXCollections.observableArrayList();
+
+    private String value;
+
+
+    public void initialize(URL url, ResourceBundle rs){
+        System.out.println(DocController.clickedPatientId + DocController.clickedAdReactionDate);
+    }
+
+    public String getP(){
+        return this.value;
+    }
+    public void setP(String s){
+        this.value = s;
+    }
+
+    public String getClickedPatient(){
+        return super.getClickedPatient();
+    }
+
+    public String getClickedAdReactionDate() {
+        return super.getClickedAdReactionDate();
+    }
+
+
+    public void display(){
+        System.out.println("ou");
+        super.display();
+    }
+
+
+    public void updatePatientView(VaccineController controller){
+
+        vaccineModelObservableList.clear();
+
+        DataBaseConnection connetNow = new DataBaseConnection();
+        Connection connectDB = connetNow.getConnection();
+        String vaccineQuery = "SELECT \"vaccino\", \"tipo\", \"sede\", \"data\" FROM \"Doctor\".vaccinazione, \"Doctor\".segnalazione WHERE \"Doctor\".vaccinazione.\"idPaziente\" = \"Doctor\".segnalazione.\"patientId\" AND \"Doctor\".vaccinazione.\"codiceSegnalazione\" = \"Doctor\".segnalazione.\"reportId\" AND \"Doctor\".segnalazione.\"patientId\" = '"+ " "+"' AND \"Doctor\".segnalazione.\"adReactionDate\" ='"+ " " +"' AND \"Doctor\".vaccinazione.data BETWEEN (\"Doctor\".segnalazione.\"adReactionDate\" - INTERVAL '2 month') AND \"Doctor\".segnalazione.\"adReactionDate\" ";
+        try {
+            Statement vaccineStatement = connectDB.createStatement();
+            ResultSet vaccineQueryOutput = vaccineStatement.executeQuery(vaccineQuery);
+            while (vaccineQueryOutput.next()) {
+
+                //il parametro di getString è una stringa che riporta il nome esatto della colonna all'interno del Database su pSQL
+                String queryVaccineName = vaccineQueryOutput.getString("vaccino");
+                String queryType = vaccineQueryOutput.getString("tipo");
+                String queryLocality = vaccineQueryOutput.getString("sede");
+                String queryDate = vaccineQueryOutput.getString("data");
+
+
+                vaccineModelObservableList.add(new VaccineModel(queryVaccineName, queryType, queryLocality,queryDate));
+                //PropertyValueFactory corrisponde agli stessi campi della classe ...Model
+                vaccineNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+                typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
+                localityColumn.setCellValueFactory(new PropertyValueFactory<>("locality"));
+                dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+
+                vaccineTable.setItems(vaccineModelObservableList);
+
+                FilteredList<VaccineModel> filteredVaccineTableData = new FilteredList<>(vaccineModelObservableList, b -> true);
+
+                vaccineDataTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+                    filteredVaccineTableData.setPredicate(VaccineModel -> {
+                        if (newValue.isEmpty() || newValue.isBlank() || newValue == null) {
+                            return true; //C'è un match
+                        }
+                        String searchKeyword = newValue.toLowerCase();
+                        if (VaccineModel.getName().toLowerCase().indexOf(searchKeyword) > -1) {
+                            return true;
+                        } else if (VaccineModel.getType().toLowerCase().indexOf(searchKeyword) > -1) {
+                            return true;
+
+                        } else if (VaccineModel.getLocality().toLowerCase().indexOf(searchKeyword) > -1) {
+                            return true;
+
+                        } else if (VaccineModel.getDate().toLowerCase().indexOf(searchKeyword) > -1) {
+                            return true;
+
+                        }else {
+                            return false;//no match found
+                        }
+                    });
+                });
+                SortedList<VaccineModel> sortedVaccineTableData = new SortedList<>(filteredVaccineTableData);
+                sortedVaccineTableData.comparatorProperty().bind(vaccineTable.comparatorProperty());
+                vaccineTable.setItems(sortedVaccineTableData);
+            }
+        }//catch (PSQLException e){
+         //   System.out.println(e.getMessage());
+         //   System.out.println("Qui");
+       // }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+}
