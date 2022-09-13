@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 import java.sql.*;
+import java.util.Calendar;
 
 public class LoginController {
     @FXML
@@ -33,20 +34,24 @@ public class LoginController {
 
     public void enterButtonOnAction(ActionEvent e) {
 
-        if (!usernameTextField.getText().isBlank() && !passwordPasswordField.getText().isBlank()) {
+        //Inserisco i dati inseriti in input dell'utente che prova a fare il login nel modello dove risiedono i dati utente
+        UserModel user = retriveUserInfo(usernameTextField.getText(),passwordPasswordField.getText());
+
+        if (!user.getUser().isBlank() && !user.getPassword().isBlank()) {
             //enterMessageLabel.setText("Welcome!");
-            validateLogin();
+            validateLogin(user);
         } else {
             enterMessageLabel.setText("Please enter username and password");
         }
     }
 
-    public void validateLogin(){
+    public void validateLogin(UserModel user){
+
         DataBaseConnection connectNow = new DataBaseConnection();
         Connection connectDB = connectNow.getConnection();
 
-        String verifyLoginDoctor = "SELECT COUNT(1) FROM \"Doctor\".\"doctorList\" WHERE id = '" + usernameTextField.getText() + "' AND password = '" + passwordPasswordField.getText() + "'";
-        String verifyLoginFarma = "SELECT COUNT(1) FROM \"Doctor\".\"farmaList\" WHERE id = '" + usernameTextField.getText() + "' AND password = '" + passwordPasswordField.getText() + "'";
+        String verifyLoginDoctor = "SELECT COUNT(1) FROM \"Doctor\".\"doctorList\" WHERE id = '" + user.getUser() + "' AND password = '" + user.getPassword() + "'";
+        String verifyLoginFarma = "SELECT COUNT(1) FROM \"Doctor\".\"farmaList\" WHERE id = '" + user.getUser() + "' AND password = '" + user.getPassword() + "'";
 
         try{
             Statement statementDoc = connectDB.createStatement();
@@ -62,7 +67,7 @@ public class LoginController {
                 }
                 else if(docQueryResult.getInt(1) == 1){
                     enterMessageLabel.setText("Welcome Doctor!");
-                    accessDoctorDb();
+                    accessDoctorDb(user);
                 }
                 else{
                     enterMessageLabel.setText("Invalidate login. Please try again.");
@@ -73,9 +78,13 @@ public class LoginController {
         }
     }
 
-    public void accessDoctorDb(){
+    public void accessDoctorDb(UserModel user){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(LoginController.class.getResource("DoctorView.fxml"));
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("DoctorView.fxml"));
+            Parent root = (Parent) loader.load();
+            //DocController dc = loader.getController();
+            //dc.setUserInfo(user);
             Stage docStage = new Stage();
             //docStage.initStyle(StageStyle.UNDECORATED);
             docStage.setScene(new Scene(root,800,500));
@@ -88,9 +97,13 @@ public class LoginController {
     }
 
     public void accessFarmaDb(){
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(LoginController.class.getResource("FarmaView.fxml"));
 
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("FarmaView.fxml"));
+            Parent root = (Parent) loader.load();
+            FarmaController fc = loader.getController();
+            fc.setReportMessage("Hello farmacologist!");
             Stage farmaStage = new Stage();
             //farmaStage.initStyle(StageStyle.UNDECORATED);
             farmaStage.setScene(new Scene(root,800,500));
@@ -99,6 +112,13 @@ public class LoginController {
             e.printStackTrace();
             e.getCause();
         }
+    }
+
+    public UserModel retriveUserInfo(String user, String password){
+        UserModel userModel = new UserModel();
+        userModel.setUser(user);
+        userModel.setPassword(password);
+        return userModel;
     }
 
 }

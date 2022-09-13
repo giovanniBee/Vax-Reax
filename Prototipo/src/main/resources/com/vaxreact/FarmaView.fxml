@@ -1,14 +1,158 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.vaxreact.FarmaController"
-            prefHeight="400.0" prefWidth="520.0">
-
+<AnchorPane fx:id="stage" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vaxreact.FarmaController">
+    <children>
+        <BorderPane layoutX="114.0" layoutY="54.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <top>
+                <AnchorPane prefHeight="65.0" prefWidth="200.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+                    <children>
+                        <Pane layoutX="102.0" layoutY="20.0" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #e0d08a;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <children>
+                                <ImageView fx:id="exit" fitHeight="15.0" fitWidth="15.0" layoutX="777.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@exit.png" />
+                                    </image>
+                                </ImageView>
+                            </children></Pane>
+                        <HBox layoutX="275.0" layoutY="1.0" prefHeight="43.0" prefWidth="525.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
+                            <children>
+                                <JFXButton fx:id="basicAnalysisHighButton" onAction="#basicAnalysisHighButtonOnActon" prefHeight="40.0" prefWidth="136.0" ripplerFill="WHITE" style="-fx-background-color: WHITE;" text="Basic analysis" textFill="#263f73">
+                                    <graphic>
+                                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@report5.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </JFXButton>
+                                <JFXButton fx:id="reportsHighButton" onAction="#reportsHighButtonOnActon" prefHeight="40.0" prefWidth="136.0" ripplerFill="WHITE" style="-fx-background-color: WHITE;" text="Reports" textFill="#263f73">
+                                    <graphic>
+                                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@visualizza5a.png" />
+                                            </image>
+                                        </ImageView>
+                                    </graphic>
+                                </JFXButton>
+                            </children></HBox>
+                        <Label fx:id="menu" layoutX="14.0" layoutY="30.0" prefHeight="20.0" prefWidth="82.0" text="MENU" textFill="#c3c3c3">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                            <graphic>
+                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@menu.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Label>
+                        <Label fx:id="menuBack" layoutX="14.0" layoutY="30.0" prefHeight="20.0" prefWidth="82.0" text="MENU" textFill="#c3c3c3">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                            <graphic>
+                                <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@menu.png" />
+                                    </image>
+                                </ImageView>
+                            </graphic>
+                        </Label>
+                    </children>
+                </AnchorPane>
+            </top>
+            <left>
+                <AnchorPane fx:id="slider" prefHeight="435.0" prefWidth="175.0" style="-fx-background-color: #e0d08a;" BorderPane.alignment="CENTER">
+                    <children>
+                        <ImageView fitHeight="158.0" fitWidth="156.0" layoutX="10.0" layoutY="267.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@vaxreax2.png" />
+                            </image>
+                        </ImageView>
+                        <JFXButton fx:id="basicAnalysisButton" alignment="BASELINE_CENTER" layoutX="18.0" layoutY="50.0" onAction="#basicAnalysisButtonOnAction" prefHeight="38.0" prefWidth="175.0" ripplerFill="BLACK" style="-fx-background-color: #e0d08a;" text="Basic analysis" textFill="#263f73" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </JFXButton>
+                        <JFXButton fx:id="reportsButton" alignment="BASELINE_CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="120.0" onAction="#reportsButtonOnAction" prefHeight="38.0" prefWidth="175.0" ripplerFill="#263f73" style="-fx-background-color: #e0d08a;" text="Reports" textFill="#263f73" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                            <font>
+                                <Font name="System Bold" size="15.0" />
+                            </font>
+                        </JFXButton>
+                        <ImageView fitHeight="71.0" fitWidth="30.0" layoutX="8.0" layoutY="52.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@report4.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="8.0" layoutY="121.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@visualizza4.png" />
+                            </image>
+                        </ImageView>
+                  <JFXButton fx:id="controlPhaseButton" alignment="BASELINE_CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="190.0" onAction="#controlPhaseOnAction" prefHeight="38.0" prefWidth="175.0" ripplerFill="#263f73" style="-fx-background-color: #e0d08a;" text="Activate control phase" textFill="#263f73" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </JFXButton>
+                    </children>
+                </AnchorPane>
+            </left>
+            <center>
+                <StackPane BorderPane.alignment="CENTER">
+                    <children>
+                        <Pane fx:id="homePage" prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <VBox prefHeight="435.0" prefWidth="624.0">
+                                    <children>
+                                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome on farmacologist's page!" textAlignment="JUSTIFY" textOrigin="CENTER" wrappingWidth="512.7832126617432" />
+                                    </children>
+                                </VBox>
+                            </children></Pane>
+                        <Pane fx:id="reportsView" prefHeight="200.0" prefWidth="200.0">
+                            <children>
+                                <Label layoutX="49.0" layoutY="32.0" text="Search" />
+                                <TextField fx:id="patientViewTextField" layoutX="96.0" layoutY="29.0" promptText="Patients ID" />
+                                <TableView fx:id="reportsTable" editable="true" layoutY="66.0" prefHeight="368.0" prefWidth="625.0">
+                                    <columns>
+                                        <TableColumn fx:id="reportIdColumn" prefWidth="50.0" text="Report ID" />
+                                        <TableColumn fx:id="patientIdPatientViewColumn" prefWidth="74.8" text="Patient ID" />
+                                        <TableColumn fx:id="adverseReactionPatientViewColumn" prefWidth="125.0" text="Adverse reaction" />
+                                        <TableColumn fx:id="adverseReactionDateColumn" prefWidth="125.0" text="Adv.reaction date" />
+                                        <TableColumn fx:id="reportDateColumn" prefWidth="125.0" text="Report date" />
+                                        <TableColumn fx:id="doctorIdColumn" prefWidth="125.0" text="Doctor ID" />
+                                    </columns>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                    </columnResizePolicy>
+                                    <cursor>
+                                        <Cursor fx:constant="DEFAULT" />
+                                    </cursor>
+                                </TableView>
+                            </children>
+                        </Pane>
+                  <Pane fx:id="controlPhaseView" prefHeight="200.0" prefWidth="200.0" />
+                  <Pane fx:id="basicAnalysisView" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="200.0" />
+                    </children>
+                </StackPane>
+            </center>
+        </BorderPane>
+    </children>
 </AnchorPane>
