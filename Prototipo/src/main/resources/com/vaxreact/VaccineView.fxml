@@ -13,10 +13,11 @@
    <children>
       <TableView fx:id="vaccineTable" layoutX="14.0" layoutY="308.0" prefHeight="180.0" prefWidth="600.0">
         <columns>
-          <TableColumn fx:id="vaccineNameColumn" prefWidth="150.0" text="Vaccine" />
-          <TableColumn fx:id="typeColumn" prefWidth="150.0" text="Type" />
-            <TableColumn fx:id="localityColumn" prefWidth="150.0" text="Locality" />
-            <TableColumn fx:id="dateColumn" prefWidth="150.0" text="Date" />
+          <TableColumn fx:id="vaccineNameColumn" prefWidth="120.0" text="Vaccine" />
+          <TableColumn fx:id="typeColumn" prefWidth="120.0" text="Type" />
+            <TableColumn fx:id="localityColumn" prefWidth="120.0" text="Locality" />
+            <TableColumn fx:id="cityColumn" prefWidth="120.0" text="City" />
+            <TableColumn fx:id="dateColumn" prefWidth="120.0" text="Date" />
         </columns>
       </TableView>
       <Label alignment="CENTER" layoutX="232.0" layoutY="283.0" prefHeight="24.0" prefWidth="294.0" text="Vaccinazioni recenti ( entro i 2 mesi )">
@@ -46,17 +47,17 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Text fx:id="doctorId" layoutX="169.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="101.99998779296868">
+      <Text fx:id="doctorIdArea" layoutX="169.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="101.99998779296868">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text fx:id="gravity" layoutX="232.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="93.33673095703125">
+      <Text fx:id="gravityArea" layoutX="232.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="93.33673095703125">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text fx:id="reportId" layoutX="314.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="154.31561279296875">
+      <Text fx:id="reportIdArea" layoutX="314.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="154.31561279296875">
          <font>
             <Font size="16.0" />
          </font>
@@ -66,12 +67,12 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Text fx:id="adReactionDate" layoutX="174.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="115.19999999999993">
+      <Text fx:id="adReactionDateArea" layoutX="174.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="115.19999999999993">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <TextArea fx:id="description" layoutX="15.0" layoutY="172.0" prefHeight="98.0" prefWidth="600.0">
+      <TextArea fx:id="descriptionArea" layoutX="15.0" layoutY="172.0" prefHeight="98.0" prefWidth="600.0">
          <font>
             <Font size="16.0" />
          </font>

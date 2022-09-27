@@ -1,11 +1,10 @@
 package com.vaxreact;
 
+import com.jfoenix.controls.JFXButton;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,10 +12,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -28,21 +27,25 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.postgresql.util.PSQLException;
+
+import static com.vaxreact.Query.getLastInsertQuery;
 
 
-public class DocController implements Initializable{
+public class DocController implements Initializable, Operation{
 
     public static final  Integer MAX_GRAVITY_LEVEL = 5;
 
     @FXML
-    private Pane reportView;
+    private Pane newReportView;
 
     @FXML
     private Pane homePage;
 
     @FXML
-    private Pane patientsView;
+    private Pane reportsView;
+
+    @FXML
+    private Pane patientsInfoView;
 
     @FXML
     private AnchorPane stage;
@@ -60,64 +63,86 @@ public class DocController implements Initializable{
     private AnchorPane slider;
 
     @FXML
-    private TableView<ReportsTableModel> reportsTable;
+    private TableView<TableModel> adverseReactionTable;
 
     @FXML
-    private TableView<DocPatientIDTableModel> patientIdTable;
+    private TableColumn<TableModel, String> name;
 
     @FXML
-    private TableView<DocRiskFactorTableModel> riskFactorTable;
+    private TableColumn<TableModel, String> gravity;
 
     @FXML
-    private TableView<DocAdverseReactionTableModel> adverseReactionTable;
+    private TableColumn<TableModel, String> description;
 
     @FXML
-    private TableColumn<DocPatientIDTableModel, String> patientIdColumn;
+    private TextField adReactionTextField;
+
+
 
     @FXML
-    private TableColumn<DocAdverseReactionTableModel, String> adverseReactionColumn;
+    private TableView<TableModel> reportsTable;
 
     @FXML
-    private TableColumn<DocRiskFactorTableModel, String> riskFactorColumn;
+    public TableColumn<TableModel, String> reportId;
 
     @FXML
-    static TableColumn<ReportsTableModel, String> doctorIdColumn;
+    private TableColumn<TableModel, String> patientId;
 
     @FXML
-    static TableColumn<ReportsTableModel, String> adverseReactionDateColumn;
+    private TableColumn<TableModel, String> adverseReaction;
 
     @FXML
-    static TableColumn<ReportsTableModel, String> adverseReactionReportsColumn;
+    private TableColumn<TableModel, String> adReactionDate;
 
     @FXML
-    static TableColumn<ReportsTableModel, String> patientIdReportsColumn;
+    private TableColumn<TableModel, String> reportDate;
 
     @FXML
-    static TableColumn<ReportsTableModel, String> reportDateColumn;
+    private TableColumn<TableModel, String> doctorId;
 
     @FXML
-    public static TableColumn<ReportsTableModel, String> reportIdColumn;
+    private TextField reportsTextField;
+
+    @FXML
+    private TableView<TableModel> patientIdTable;
+
+    @FXML
+    private TableColumn<TableModel, String> id;
 
     @FXML
     private TextField patientIdTextField;
 
     @FXML
-    private TextField adReactionTextField;
+    private TableView<TableModel> patientsInfoTable;
 
     @FXML
-    private TextField riskFactorTextField;
+    private TableColumn<TableModel, String> patientIdPatientsInfoColumn;
 
     @FXML
-    private TextField reportsTextField;
+    private  TableColumn<TableModel, String> dateOfBirthColumn;
+
+    @FXML
+    private TableColumn<TableModel, String> residenceColumn;
+
+    @FXML
+    private TableColumn<TableModel, String> professionColumn;
+
+    @FXML
+    private TableColumn<TableModel, String> adverseReactionsColumn;
+
+    @FXML
+    private TextField patientsInfoTextField;
+
+
+
+
+
 
     @FXML
     private Text commitAdverseReaction;
 
     @FXML
     private Text commitPatientID;
-
-    @FXML
-    private Text commitRiskFactor;
 
     @FXML
     private TextField commitAdReactionDate;
@@ -134,113 +159,179 @@ public class DocController implements Initializable{
     @FXML
     private TextArea descriptionArea;
 
-    /*
 
 
-    @FXML
-    private JFXButton reportButton;
+
 
     @FXML
     private JFXButton reportHighButton;
-
     @FXML
-    private JFXButton viewPatientsButton;
-
+    private JFXButton viewReportsHighButton;
     @FXML
-    private JFXButton viewPatientsHighButton;
+    private JFXButton patientsInfoHighButton;
 
-*/
-    ObservableList<DocPatientIDTableModel> docPatientIDTableModelObservableList = FXCollections.observableArrayList();
-    //ObservableList<DocRiskFactorTableModel> docRiskFactorTableModelObservableList = FXCollections.observableArrayList();
-    ObservableList<DocAdverseReactionTableModel>docAdverseReactionTableModelObservableList = FXCollections.observableArrayList();
-    ObservableList<ReportsTableModel> reportsTableModelObservableList = FXCollections.observableArrayList();
+
+    ObservableList<TableModel> docPatientIDTableModelObservableList = FXCollections.observableArrayList();
+    ObservableList<TableModel> docPatientInfoTableModelObservableList = FXCollections.observableArrayList();
+    ObservableList<TableModel>docAdverseReactionTableModelObservableList = FXCollections.observableArrayList();
+    ObservableList<TableModel> docReportsTableModelObservableList = FXCollections.observableArrayList();
     ObservableList<Integer> choiceBoxModelObservableList = FXCollections.observableArrayList();
     private UserModel userInfo;
 
     public void setUserInfo(UserModel user){
         this.userInfo = user;
     }
-    public UserModel getUserInfo(){
-        return this.userInfo;
+
+    public void reportButtonOnAction() {
+        showNewReport();
+    }
+    public void reportHighButtonOnActon() {
+        showNewReport();
+    }
+    @FXML
+    public void viewReportsHighButtonOnActon() {
+        showReports();
+    }
+    //sarebbe view reports
+    public void viewPatientsButtonOnAction (){
+        showReports();
+    }
+    @FXML
+    void patientsInfoHighButtonOnAction() {
+        showPatientsInfo();
+    }
+    @FXML
+    void patientsInfoButtonOnAction() {
+        showPatientsInfo();
     }
 
+    void showPatientsInfo(){
+        homePage.setVisible(false);
+        reportsView.setVisible(false);
+        newReportView.setVisible(false);
+        patientsInfoView.setVisible(true);
+        patientsInfoHighButton.setStyle("-fx-border-color: blue; -fx-border-style: solid solid solid solid");
+        viewReportsHighButton.setStyle("-fx-border-color: #d5d5d5");
+        reportHighButton.setStyle("-fx-border-color: #d5d5d5");
+    }
+    void showReports(){
+        patientsInfoView.setVisible(false);
+        homePage.setVisible(false);
+        newReportView.setVisible(false);
+        reportsView.setVisible(true);
+        viewReportsHighButton.setStyle("-fx-border-color: blue; -fx-border-style: solid solid solid solid");
+        reportHighButton.setStyle("-fx-border-color: #d5d5d5");
+        patientsInfoHighButton.setStyle("-fx-border-color: #d5d5d5; -fx-border-style: solid solid solid hidden");
+    }
+    void showNewReport(){
+        patientsInfoView.setVisible(false);
+        homePage.setVisible(false);
+        reportsView.setVisible(false);
+        newReportView.setVisible(true);
+        reportHighButton.setStyle("-fx-border-color: blue; -fx-border-style: solid solid solid solid");
+        patientsInfoHighButton.setStyle("-fx-border-color: #d5d5d5; -fx-border-style: solid hidden solid hidden" );
+        viewReportsHighButton.setStyle("-fx-border-color: #d5d5d5; -fx-border-style: solid solid solid solid");
+    }
 
-    public  void initialize (URL url, ResourceBundle resourse) {
+    public  void initialize (URL url, ResourceBundle resource) {
 
-        reportView.setVisible(false);
-        patientsView.setVisible(false);
+        patientsInfoView.setVisible(false);
+        newReportView.setVisible(false);
+        reportsView.setVisible(false);
         homePage.setVisible(true);
         slider.setTranslateX(0); //se inizializzata a -176 il menu non compare
 
+        reportsTable.prefWidthProperty().bind(reportsView.widthProperty());
+        reportsTable.prefHeightProperty().bind(reportsView.heightProperty());
+        patientsInfoTable.prefWidthProperty().bind(patientsInfoView.widthProperty());
+        patientsInfoTable.prefHeightProperty().bind(patientsInfoView.heightProperty());
+
+
         Platform.runLater(() -> {
-        initializeTables();
 
-        //ArrayList<TableColumn<ReportsTableModel,String>> columns = getReportsTableToArray();
-        //System.out.println(reportIdColumn.setCellValueFactory(new PropertyValueFactory<>("reportId")));
-        Query.executeReportsUpdate(reportsTableModelObservableList, reportsTable, reportsTextField);
+            try {
+                updateTables();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            gravityLevelImplementation();
 
-        exit.setOnMouseClicked(event -> {
-            System.exit(0);
-        });
+            exit.setOnMouseClicked(event -> System.exit(0));
 
         menu.setOnMouseClicked(event -> {
             TranslateTransition slideMenu = new TranslateTransition();
-            TranslateTransition slidePatientTable = new TranslateTransition();
             TranslateTransition slideReportTable = new TranslateTransition();
+            TranslateTransition slidePatientsInfoTable = new TranslateTransition();
+            TranslateTransition slideNewReportPane = new TranslateTransition();
 
             slideMenu.setDuration(Duration.seconds(0.5));
-            slidePatientTable.setDuration(Duration.seconds(0.5));
             slideReportTable.setDuration(Duration.seconds(0.5));
+            slidePatientsInfoTable.setDuration(Duration.seconds(0.5));
+            slideNewReportPane.setDuration(Duration.seconds(0.5));
 
             slideMenu.setNode(slider);
-            slidePatientTable.setNode(reportsTable);
-            slideReportTable.setNode(patientIdTable);
+            slideReportTable.setNode(reportsTable);
+            slidePatientsInfoTable.setNode(patientsInfoTable);
+            slideNewReportPane.setNode(newReportView);
+
 
             slideMenu.setToX(0);
-            slidePatientTable.setToX(0);
             slideReportTable.setToX(0);
+            slidePatientsInfoTable.setToX(0);
+            slideNewReportPane.setToX(0);
 
             slideMenu.play();
-            slidePatientTable.play();
             slideReportTable.play();
+            slidePatientsInfoTable.play();
+            slideNewReportPane.play();
+
 
             slider.setTranslateX(-176);
 
             slideMenu.setOnFinished((ActionEvent e) -> {
 
-                reportsTable.prefWidthProperty().bind(patientsView.widthProperty());
-                patientIdTable.prefWidthProperty().bind(patientsView.widthProperty());
+                reportsTable.prefWidthProperty().bind(reportsView.widthProperty());
+                patientsInfoTable.prefWidthProperty().bind(patientsInfoView.widthProperty());
+                reportsTable.prefHeightProperty().bind(reportsView.heightProperty());
+                patientsInfoTable.prefHeightProperty().bind(patientsInfoView.heightProperty());
 
                 menu.setVisible(false);
                 menuBack.setVisible(true);
             });
         });
 
-        menuBack.setOnMouseClicked(event -> {
+            menuBack.setOnMouseClicked(event -> {
 
-            TranslateTransition slideMenu = new TranslateTransition();
-            TranslateTransition slidePatientTable = new TranslateTransition();
-            TranslateTransition slideReportTable = new TranslateTransition();
+                TranslateTransition slideMenu = new TranslateTransition();
+                TranslateTransition slideNewReportPane = new TranslateTransition();
+                TranslateTransition slideReportTable = new TranslateTransition();
+                TranslateTransition slidePatientsInfoTable = new TranslateTransition();
 
-            slideMenu.setDuration(Duration.seconds(0.5));
-            slidePatientTable.setDuration(Duration.seconds(0.5));
-            slideReportTable.setDuration(Duration.seconds(0.5));
+                slideMenu.setDuration(Duration.seconds(0.5));
+                slideNewReportPane.setDuration(Duration.seconds(0.5));
+                slideReportTable.setDuration(Duration.seconds(0.5));
+                slidePatientsInfoTable.setDuration(Duration.seconds(0.5));
 
-            slideMenu.setNode(slider);
-            slidePatientTable.setNode(reportsTable);
-            slideReportTable.setNode(patientIdTable);
+                slideMenu.setNode(slider);
+                slideReportTable.setNode(reportsTable);
+                slidePatientsInfoTable.setNode(patientsInfoTable);
+                slideNewReportPane.setNode(newReportView);
 
-            slideMenu.setToX(-176);
-            slidePatientTable.setToX(-176);
-            slideReportTable.setToX(-176);
 
-            slideMenu.play();
-            slidePatientTable.play();
-            slideReportTable.play();
-            slider.setTranslateX(0);
+                slideMenu.setToX(-176);
+                slideNewReportPane.setToX(-176);
+                slideReportTable.setToX(-176);
+                slidePatientsInfoTable.setToX(-176);
+
+                slideMenu.play();
+                slideNewReportPane.play();
+                slideReportTable.play();
+                slidePatientsInfoTable.play();
+                slider.setTranslateX(0);
+
 
             reportsTable.prefWidthProperty().bind(stage.widthProperty());
-            patientIdTable.prefWidthProperty().bind(stage.widthProperty());
+            patientsInfoTable.prefWidthProperty().bind(stage.widthProperty());
 
             slideMenu.setOnFinished((ActionEvent e) -> {
                 menu.setVisible(true);
@@ -248,58 +339,39 @@ public class DocController implements Initializable{
             });
         });
 
-        patientIdTable.setOnMousePressed(event -> {
-            String clicked = patientIdTable.getSelectionModel().getSelectedItem().getPatientID();
-            commitPatientID.setText(clicked);
-            System.out.println(clicked);
-        });
-        /*
-        riskFactorTable.setOnMousePressed(event -> {
-            String clicked = riskFactorTable.getSelectionModel().getSelectedItem().getRiskFactor();
-            commitRiskFactor.setText(clicked);
-            System.out.println(clicked);
-        });
+            patientIdTable.setOnMousePressed(event -> {
+                String clicked = patientIdTable.getSelectionModel().getSelectedItem().arrayList.get(0);
+                commitPatientID.setText(clicked);
+            });
 
-         */
-        adverseReactionTable.setOnMousePressed(event -> {
-            String clicked = adverseReactionTable.getSelectionModel().getSelectedItem().getAdverseReaction();
+            adverseReactionTable.setOnMousePressed(event -> {
+            String clicked = adverseReactionTable.getSelectionModel().getSelectedItem().arrayList.get(0);
             commitAdverseReaction.setText(clicked);
-            System.out.println(clicked);
         });
 
-        reportsTable.setOnMousePressed(event -> {
-            //INSERT REAZIONE AVVERSA
 
+          //CLICCO SULLE VOCI DELLA TABELLA REPORT PER VEDERNE I DETTAGLI
+            reportsTable.setOnMousePressed(event -> {
 
             //Recupero le informazioni dalla vista
-            String clickedReportId = reportsTable.getSelectionModel().getSelectedItem().getReportId();
-            System.out.println(clickedReportId);
-            String clickedPatientId = reportsTable.getSelectionModel().getSelectedItem().getPatientId();
-            System.out.println(clickedPatientId);
-            String clickedAdReactionDate = reportsTable.getSelectionModel().getSelectedItem().getAdReactionDate();
-            System.out.println(clickedAdReactionDate);
-            String clickedDoctorId = reportsTable.getSelectionModel().getSelectedItem().getDoctorId();
-            System.out.println(clickedDoctorId);
-            String clickedAdverseReaction = reportsTable.getSelectionModel().getSelectedItem().getAdverseReaction();
-            System.out.println(clickedAdverseReaction);
-            String clickedReportDate = reportsTable.getSelectionModel().getSelectedItem().getReportDate();
-            System.out.println(clickedReportDate);
-            String description = descriptionArea.getText();
-            System.out.println(description);
-            Integer gravityLevel = choiceBox.getValue();
-            System.out.println(gravityLevel);
+            String clickedReportId = reportsTable.getSelectionModel().getSelectedItem().getCodice();
+            String clickedPatientId = reportsTable.getSelectionModel().getSelectedItem().getCodicePaziente();
+            String clickedAdReactionDate = reportsTable.getSelectionModel().getSelectedItem().getDataReazione();
+            String clickedDoctorId = reportsTable.getSelectionModel().getSelectedItem().getUserMedico();
+            String clickedAdverseReaction = reportsTable.getSelectionModel().getSelectedItem().getReazioneAvversa();
+            String clickedReportDate = reportsTable.getSelectionModel().getSelectedItem().getDataReport();
+
             //Inserisco le informazioni negli oggetti rispettivi
-            ReportsTableModel reportModel = retriveReportInfo(clickedReportId,clickedPatientId,clickedDoctorId,clickedAdReactionDate,clickedAdverseReaction,clickedReportDate);
-            DocAdverseReactionTableModel adverseReactionModel = retriveAdReactionInfo(clickedAdverseReaction, gravityLevel, description);
+            ArrayList<String> reportModel = retriveReportInfo(clickedReportId,clickedPatientId,clickedDoctorId,clickedAdReactionDate,clickedAdverseReaction,clickedReportDate);
 
             //Apertura view vaccini
             try {
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(DocController.class.getResource("VaccineView.fxml")); // [b]<== path to .fxml is correct[/b]
                 try {
-                    Parent root = (Parent) loader.load();  // [b]<=== ERROR here! The path in getResource() is correct[/b]
+                    Parent root = loader.load();  // [b]<=== ERROR here! The path in getResource() is correct[/b]
                     ReportDetailsController reportDetailsController = loader.getController();
-                    reportDetailsController.setReportDetailsInfo(reportModel,adverseReactionModel);
+                    reportDetailsController.setReportDetailsInfo(reportModel);
                     Stage docStage = new Stage();
                     Scene scene = new Scene(root);
                     docStage.setScene(scene);
@@ -311,36 +383,79 @@ public class DocController implements Initializable{
                 }
             } catch (IllegalStateException exception) {
                 System.out.println(exception.getMessage());
-                System.out.println(exception.getCause());
             } catch (Exception e) {
                 e.printStackTrace();
                 e.getCause();
             }
         });
 
-        //Inserisce una nuova segnalazione
-        sendReportButton.setOnMousePressed( event -> {
+            // CLICCO SULLE VOCI DELLA TABELLA PATIENT'S INFO PER VEDERNE I DETTAGLI
+            patientsInfoTable.setOnMousePressed(event -> {
+                String clickedPatientId = patientsInfoTable.getSelectionModel().getSelectedItem().getCodice();
+                //Apertura view vaccini
+                try {
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(DocController.class.getResource("PatientInfoView.fxml")); // [b]<== path to .fxml is correct[/b]
+                    try {
+                        Parent root = loader.load();  // [b]<=== ERROR here! The path in getResource() is correct[/b]
+                        PatientInfoDetailsController patientInfoDetails = loader.getController();
+                        patientInfoDetails.setPatientsInfoDetails(clickedPatientId);
+                        Stage docStage = new Stage();
+                        Scene scene = new Scene(root);
+                        docStage.setScene(scene);
+                        docStage.show();
+
+                    } catch (IOException e) {
+                        Logger.getLogger(DocController.class.getName()).log(Level.SEVERE, null, e);
+                        System.out.println("Loader error : " + e);
+                    }
+                } catch (IllegalStateException exception) {
+                    System.out.println(exception.getMessage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    e.getCause();
+                }
+            });
+
+
+            //Inserisce una nuova segnalazione
+            sendReportButton.setOnMousePressed( event -> {
 
             if(commitPatientID.getText().isBlank() || commitAdverseReaction.getText().isBlank() || choiceBox.getSelectionModel().getSelectedItem() == null){
                 checkCommitLabel.setText("Please fill in all fields");
             }
             else {
-                    String query = Query.insertQuery(commitPatientID.getText(),commitAdverseReaction.getText(),commitAdReactionDate.getText(),userInfo.getUser());
-                    boolean resultQuery = Query.executeNewInsert(query);
-                    System.out.println(resultQuery);
-                    if(resultQuery == true) {
+                    String query = Query.insertQuery(commitPatientID.getText(), commitAdverseReaction.getText(), commitAdReactionDate.getText(), userInfo.getUser(), choiceBox.getValue(), descriptionArea.getText());
+                boolean resultQuery = false;
+                try {
+                    resultQuery = Query.executeNewInsert(query);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+
+                if(resultQuery) {
                         checkCommitLabel.setText("Please enter a correct date (YYYY-MM-DD)");
                     }
                     else{
-                        Query.executeReportsUpdate(reportsTableModelObservableList, reportsTable, reportsTextField);
-
-                        checkCommitLabel.setText("");
+                        try {
+                            updateTables();
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                        checkCommitLabel.setTextFill(Color.DARKGREEN);
+                        checkCommitLabel.setText("Report correctly sent");
                         commitPatientID.setText("");
                         commitAdverseReaction.setText("");
                         commitAdReactionDate.setText("");
 
-                        //Controllo del superamento del limite delle 50 segnalazioni
-                        checkReportLimit();
+                        //se la gravità è alta, si controlla le segnalazioni recenti
+                        if(choiceBox.getValue()>=3) {
+                            try {
+                                tryToInsertSeriousReport();
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
             }
         });
@@ -348,180 +463,131 @@ public class DocController implements Initializable{
         });
     }
 
-    public void initializeTables () {
 
-            DataBaseConnection connetNow = new DataBaseConnection();
-            Connection connectDB = connetNow.getConnection();
 
-            //Query SQL eseguita su postgreSQL
-            String patientIdQuery = "SELECT * FROM \"Doctor\".\"patientList\" ORDER BY id ASC";
-            String adverseReactionQuery = "SELECT * FROM \"Doctor\".\"reazioniAvverse\" ORDER BY nome ASC";
+    /*
+        Questo metodo consente di collegare i report e vaccini che sono vicini temporalente
+     */
+    public void tryToInsertSeriousReport() throws SQLException {
 
+        Connection connectDB = CreateConnection.getInstance().getConnection();
+        Statement getLastInsertStatement = connectDB.createStatement();
+        ResultSet getLastInsertQueryOutput = getLastInsertStatement.executeQuery(getLastInsertQuery());
+
+        try {
+
+
+            assert getLastInsertQueryOutput != null;
+            if (!getLastInsertQueryOutput.next()) {
+                System.exit(0);
+            }
+            Integer reportIdentifier = getLastInsertQueryOutput.getInt(1);
+
+            Connection connectDB1 = CreateConnection.getInstance().getConnection();
+            Statement checkLastInsertStatement = connectDB1.createStatement();
+            ResultSet checkLastInsertQueryOutput = checkLastInsertStatement.executeQuery(Query.getVerificationInTheLastMonthQuery(reportIdentifier));
+
+            assert checkLastInsertQueryOutput != null;
+            if (!checkLastInsertQueryOutput.next()) {
+                System.exit(0);
+            } else {
+                ArrayList<String> arrayList = Query.getRowValue(checkLastInsertQueryOutput);
+                String query = Query.insertVaccination_ReportQuery(arrayList.get(0), arrayList.get(3), arrayList.get(1), arrayList.get(2));
+                boolean resultQuery = Query.executeNewInsert(query);
+                if (resultQuery) {
+                    checkCommitLabel.setText("L'insert in Vaccinazione_Segnalazione NON è avvenuto correttamente");
+                } else {
+                    System.out.println("L'insert in Vaccinazione_Segnalazione è avvenuto correttamente.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
             try {
-                Statement patientStatement = connectDB.createStatement();
-                //   Statement riskFactorStatement = connectDB.createStatement();
-                Statement adverseReactionStatement = connectDB.createStatement();
+                connectDB.close();
+            } catch (Exception e) { /* Ignored */ }
+            try {
+                getLastInsertStatement.close();
+            } catch (Exception e) { /* Ignored */ }
 
-                ResultSet patientQueryOutput = patientStatement.executeQuery(patientIdQuery);
-
-                ResultSet adverseReactionQueryOutput = adverseReactionStatement.executeQuery(adverseReactionQuery);
-
-                while (patientQueryOutput.next()) {
-                    //il parametro di getString è una stringa che riporta il nome esatto della colonna all'interno del Database su pSQL
-                    String queryPatientId = patientQueryOutput.getString("id");
-                    //Popolazione ObservableList
-                    docPatientIDTableModelObservableList.add(new DocPatientIDTableModel(queryPatientId));
-                }
-                while (adverseReactionQueryOutput.next()) {
-                    //il parametro di getString è una stringa che riporta il nome esatto della colonna all'interno del Database su pSQL
-                    String queryAdverseReaction = adverseReactionQueryOutput.getString("nome");
-                    Integer queryGravityLevel = adverseReactionQueryOutput.getInt("gravità");
-                    String queryDescription = adverseReactionQueryOutput.getString("descrizione");
-                    //Popolazione ObservableList
-                    docAdverseReactionTableModelObservableList.add(new DocAdverseReactionTableModel(queryAdverseReaction,queryGravityLevel ,queryDescription ));
-                }
-
-                //Implementazione dell'observableArrayList per la gravità
-                gravityLevelImplementation();
-
-                //PropertyValueFactory corrisponde agli stessi campi della classe ...Model
-                patientIdColumn.setCellValueFactory(new PropertyValueFactory<>("patientID"));
-                //System.out.println(patientIdColumn.setCellValueFactory(new PropertyValueFactory<>("patientID")));
-                //riskFactorColumn.setCellValueFactory(new PropertyValueFactory<>("riskFactor"));
-                adverseReactionColumn.setCellValueFactory(new PropertyValueFactory<>("adverseReaction"));
-
-
-                patientIdTable.setItems(docPatientIDTableModelObservableList);
-                // riskFactorTable.setItems(docRiskFactorTableModelObservableList);
-                adverseReactionTable.setItems(docAdverseReactionTableModelObservableList);
-                //inizializzazione dei valori della check box per la gravità
-                choiceBox.setItems(choiceBoxModelObservableList);
-
-                //Filtraggio dati mentre si cerca nella tabella
-                FilteredList<DocPatientIDTableModel> filteredPatientIdTableData = new FilteredList<>(docPatientIDTableModelObservableList, b -> true);
-                // FilteredList<DocRiskFactorTableModel> filteredRiskFactorTableData = new FilteredList<>(docRiskFactorTableModelObservableList, b->true);
-                FilteredList<DocAdverseReactionTableModel> filteredAdverseReactionTableData = new FilteredList<>(docAdverseReactionTableModelObservableList, b -> true);
-
-                patientIdTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-                    filteredPatientIdTableData.setPredicate(DocPatientIDTableModel -> {
-                        //SE non si riempie il campo mostra tutti i pazienti
-                        if (newValue.isEmpty() || newValue.isBlank() || newValue == null) {
-                            return true;
-                        }
-                        String searchKeyword = newValue.toLowerCase();
-                        if (DocPatientIDTableModel.getPatientID().toLowerCase().indexOf(searchKeyword) > -1)
-                            return true; //C'è un match
-                        else
-                            return false; //no match
-                    });
-                });
-
-                adReactionTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-                    filteredAdverseReactionTableData.setPredicate(DocAdverseReactionTableModel -> {
-                        //SE non si riempie il campo mostra tutti i pazienti
-                        if (newValue.isEmpty() || newValue.isBlank() || newValue == null) {
-                            return true;
-                        }
-                        String searchKeyword = newValue.toLowerCase();
-                        if (DocAdverseReactionTableModel.getAdverseReaction().toLowerCase().indexOf(searchKeyword) > -1)
-                            return true; //C'è un match
-                        else
-                            return false; //no match
-                    });
-                });
-
-                SortedList<DocPatientIDTableModel> sortedPatientIdTableData = new SortedList<>(filteredPatientIdTableData);
-
-                SortedList<DocAdverseReactionTableModel> sortedAdverseReactionTableData = new SortedList<>(filteredAdverseReactionTableData);
-
-                //bind dei risultati ordinati con la Table View
-                sortedPatientIdTableData.comparatorProperty().bind(patientIdTable.comparatorProperty());
-
-                sortedAdverseReactionTableData.comparatorProperty().bind(adverseReactionTable.comparatorProperty());
-
-                //Applico i dati filtrati ed ordinati alla Table View
-                patientIdTable.setItems(sortedPatientIdTableData);
-
-                adverseReactionTable.setItems(sortedAdverseReactionTableData);
-
-            } catch (PSQLException e) {
-                System.out.println(e.getMessage());
-            } catch (SQLException e) {
-                Logger.getLogger(DocController.class.getName()).log(Level.SEVERE, null, e);
-                e.printStackTrace();
-            }
         }
-
-        public void viewPatientsButtonOnAction (ActionEvent actionEvent){
-            homePage.setVisible(false);
-            reportView.setVisible(false);
-            patientsView.setVisible(true);
-        }
-
-        public void reportButtonOnAction(ActionEvent actionEvent) {
-        homePage.setVisible(false);
-        patientsView.setVisible(false);
-        reportView.setVisible(true);
     }
-
-        public void viewPatientsHighButtonOnActon(ActionEvent actionEvent) {
-        homePage.setVisible(false);
-        reportView.setVisible(false);
-        patientsView.setVisible(true);
-    }
-
-        public void reportHighButtonOnActon(ActionEvent actionEvent) {
-        homePage.setVisible(false);
-        patientsView.setVisible(false);
-        reportView.setVisible(true);
-    }
-
-        public void checkReportLimit(){
-
-            DataBaseConnection connetNow = new DataBaseConnection();
-            Connection connectDB = connetNow.getConnection();
-            String checkReportQuery = "SELECT COUNT(*) FROM \"Doctor\".segnalazione";
-
-            try{
-                Statement checkReportStatement = connectDB.createStatement();
-                ResultSet checkReportQueryOutput = checkReportStatement.executeQuery(checkReportQuery);
-                while (checkReportQueryOutput.next()){
-                           if(checkReportQueryOutput.getInt(1) % 50 == 0){
-                                WarningTask.sendWarning();
-                           }
-                }
-            }
-            catch (PSQLException psqlException){
-                System.out.println(psqlException.getMessage());
-            }
-            catch (SQLException e){
-                e.printStackTrace();
-            }
-        }
 
         public void gravityLevelImplementation(){
         for(int i = 1; i <= MAX_GRAVITY_LEVEL ; i++) {
             choiceBoxModelObservableList.add(i);
             }
+        choiceBox.setItems(choiceBoxModelObservableList);
         }
 
-        public ReportsTableModel retriveReportInfo(String report, String patient, String doctor, String adReactionDate, String adverseReaction, String reportDate){
+        public ArrayList<String> retriveReportInfo(String report, String patient, String doctor, String adReactionDate, String adverseReaction, String reportDate){
+
         ArrayList<String> arrayList = new ArrayList<>();
-        ReportsTableModel reportModel = new ReportsTableModel(arrayList);
-        reportModel.setReportId(report);
-        reportModel.setPatientId(patient);
-        reportModel.setDoctorId(doctor);
-        reportModel.setAdReactionDate(adReactionDate);
-        reportModel.setAdverseReaction(adverseReaction);
-        reportModel.setReportDate(reportDate);
-        return reportModel;
+            arrayList.add(report);
+            arrayList.add(patient);
+            arrayList.add(doctor);
+            arrayList.add(adReactionDate);
+            arrayList.add(adverseReaction);
+            arrayList.add(reportDate);
+
+            return arrayList;
         }
 
-        public DocAdverseReactionTableModel retriveAdReactionInfo(String name, Integer gravityLevel, String description ){
-        DocAdverseReactionTableModel adReactionModel = new DocAdverseReactionTableModel(name,gravityLevel,description);
-        return adReactionModel;
+        /*
+        Aggiorna le tabelle del programma (tabella dei report, dei pazienti, delle reazioni avverse e degli ID dei pazienti).
+         */
+        public void updateTables() throws SQLException {
+
+            Query query = new Query();
+            ArrayList<TableColumn<TableModel,String>> arrayList = createReportsTableObject();
+            query.executeUpdate(docReportsTableModelObservableList, reportsTable, reportsTextField, arrayList,1);
+
+            arrayList= createPatientIDTableObject();
+            query.executeUpdate(docPatientIDTableModelObservableList, patientIdTable, patientIdTextField, arrayList,2);
+
+            arrayList= createAdverseReactionTableObject();
+            query.executeUpdate(docAdverseReactionTableModelObservableList, adverseReactionTable, adReactionTextField, arrayList,3);
+
+            arrayList = createPatientInfoTableObject();
+            query.executeUpdate(docPatientInfoTableModelObservableList, patientsInfoTable, patientsInfoTextField, arrayList, 4);
         }
 
+    public ArrayList<TableColumn<TableModel,String>> createPatientInfoTableObject(){
+        ArrayList<TableColumn<TableModel,String>> arrayList = new ArrayList<>();
+        arrayList.add(patientIdPatientsInfoColumn);
+        arrayList.add(dateOfBirthColumn);
+        arrayList.add(residenceColumn);
+        arrayList.add(professionColumn);
+        arrayList.add(adverseReactionsColumn);
 
+        return arrayList;
+    }
 
+        public ArrayList<TableColumn<TableModel,String>> createReportsTableObject(){
+            ArrayList<TableColumn<TableModel,String>> arrayList = new ArrayList<>();
+
+            arrayList.add(reportId);
+            arrayList.add(adReactionDate);
+            arrayList.add(adverseReaction);
+            arrayList.add(patientId);
+            arrayList.add(doctorId);
+            arrayList.add(reportDate);
+            arrayList.add(gravity);
+            arrayList.add(description);
+
+            return arrayList;
+        }
+
+        public ArrayList<TableColumn<TableModel,String>> createPatientIDTableObject(){
+            ArrayList<TableColumn<TableModel,String>> arrayList = new ArrayList<>();
+            arrayList.add(id);
+
+            return arrayList;
+        }
+        public ArrayList<TableColumn<TableModel,String>> createAdverseReactionTableObject(){
+            ArrayList<TableColumn<TableModel,String>> arrayList = new ArrayList<>();
+            arrayList.add(name);
+
+            return arrayList;
+        }
 }

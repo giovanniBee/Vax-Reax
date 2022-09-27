@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vaxreact.ReportForProvinceController">
+   <children>
+      <TableView fx:id="reportsForProvinceTable" layoutX="163.0" layoutY="93.0" prefHeight="244.0" prefWidth="260.0">
+        <columns>
+          <TableColumn fx:id="provinceColumn" prefWidth="130.0" text="Province" />
+          <TableColumn fx:id="numOfReportsColumn" prefWidth="130.0" text="n° Reports" />
+        </columns>
+      </TableView>
+      <TextField fx:id="reportsForProvinceTextField" layoutX="273.0" layoutY="60.0" promptText="Vaccine data" />
+      <Label layoutX="218.0" layoutY="64.0" prefHeight="17.0" prefWidth="45.0" text="Search :" />
+   </children>
+</AnchorPane>

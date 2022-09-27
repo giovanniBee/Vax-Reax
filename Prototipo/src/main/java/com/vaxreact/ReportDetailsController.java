@@ -15,119 +15,140 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class ReportDetailsController extends DocController implements Initializable {
 
     @FXML
-    private Text reportId;
+    private Text reportIdArea;
 
     @FXML
-    private TextArea description;
+    private TextArea descriptionArea;
 
     @FXML
-    private Text doctorId;
+    private Text doctorIdArea;
 
     @FXML
-    private Text gravity;
+    private Text gravityArea;
 
     @FXML
-    private Text adReactionDate;
+    private Text adReactionDateArea;
 
     @FXML
-    private TableView<VaccineModel> vaccineTable;
+    private TableView<VaccinationModel> vaccineTable;
 
     @FXML
-    private TableColumn<VaccineModel, String> dateColumn;
+    private TableColumn<VaccinationModel, String> dateColumn;
 
     @FXML
-    private TableColumn<VaccineModel, String> localityColumn;
+    private TableColumn<VaccinationModel, String> localityColumn;
 
     @FXML
-    private TableColumn<VaccineModel, String> typeColumn;
+    private  TableColumn<VaccinationModel, String> cityColumn;
 
     @FXML
-    private TableColumn<VaccineModel, String> vaccineNameColumn;
+    private TableColumn<VaccinationModel, String> typeColumn;
+
+    @FXML
+    private TableColumn<VaccinationModel, String> vaccineNameColumn;
 
     @FXML
     private TextField vaccineDataTextField;
 
-    ObservableList<VaccineModel>vaccineModelObservableList = FXCollections.observableArrayList();
+    ObservableList<VaccinationModel> vaccinationModelObservableList = FXCollections.observableArrayList();
 
-    private ReportsTableModel reportInfo;
-    private DocAdverseReactionTableModel adverseReactionInfo;
+    private ArrayList<String> reportInfo;
 
-    public void setReportDetailsInfo(ReportsTableModel reportInfo, DocAdverseReactionTableModel adReactionModel){
+
+    // private DocAdverseReactionTableModel adverseReactionInfo;
+
+    public void setReportDetailsInfo(ArrayList<String> reportInfo){
         this.reportInfo = reportInfo;
-        this.adverseReactionInfo = adReactionModel;
     }
 
-    public ReportsTableModel getReportInfo(){
+    public ArrayList<String> getReportInfo(){
         return this.reportInfo;
     }
 
-    public DocAdverseReactionTableModel getAdverseReactionInfo(){
-        return  this.adverseReactionInfo;
-    }
 
     public void initialize(URL url, ResourceBundle rs){
         Platform.runLater(() -> {
-            updatePatientView(getReportInfo().getPatientId(),getReportInfo().getAdReactionDate());
-            System.out.println("QUI-"+ getAdverseReactionInfo().getDescription()+getAdverseReactionInfo().getGravityLevel()+"-");
-            updateReportDetails(getAdverseReactionInfo(),getReportInfo());
 
+            //System.out.println("QUI-"+ getAdverseReactionInfo().getDescriptionArea()+getAdverseReactionInfo().getGravityLevel()+"-");
+            //updateReportDetails(getAdverseReactionInfo(),getReportInfo());
+
+            Query query = new Query();
+
+            String description = query.getCell(Query.getDescriptionQuery(getReportInfo().get(0)));
+            String gravity = query.getCell(Query.getGravityQuery(getReportInfo().get(0)));
+            System.out.println(description+" =descriptionArea "+gravity+" =gravityArea"+getReportInfo().get(1)+" =patientId");
+            initializeView(getReportInfo(),description,gravity);
+            updatePatientView(getReportInfo().get(0));
         });
     }
 
-    public void updatePatientView(String patientId, String date){
 
-        vaccineModelObservableList.clear();
+    public void updatePatientView(String reportId){
+
+        vaccinationModelObservableList.clear();
 
         DataBaseConnection connetNow = new DataBaseConnection();
         Connection connectDB = connetNow.getConnection();
-        String vaccineQuery = "SELECT \"vaccino\", \"tipo\", \"sede\", \"data\" FROM \"Doctor\".vaccinazione, \"Doctor\".segnalazione WHERE \"Doctor\".vaccinazione.\"idPaziente\" = \"Doctor\".segnalazione.\"patientId\" AND \"Doctor\".vaccinazione.\"codiceSegnalazione\" = \"Doctor\".segnalazione.\"reportId\" AND \"Doctor\".segnalazione.\"patientId\" = '"+ patientId +"' AND \"Doctor\".segnalazione.\"adReactionDate\" ='"+ date +"' AND \"Doctor\".vaccinazione.data BETWEEN (\"Doctor\".segnalazione.\"adReactionDate\" - INTERVAL '2 month') AND \"Doctor\".segnalazione.\"adReactionDate\" ";
+        String vaccineQuery = "SELECT DISTINCT V.\"Nome\", V.\"Tipo\", V.\"Sede\", SE.\"Provincia\", V.\"Data\" AS \"DataVaccino\" \n" +
+                " FROM \"Segnalazione\" S, \"Vaccinazione\" V, \"Paziente\" P, \"Sede\" SE \n" +
+                " WHERE  S.\"CodicePaziente\" = P.\"Codice\" AND P.\"Codice\" = V.\"CodicePaziente\" \n" +
+                " AND\tS.\"Codice\" = ? AND SE.\"Nome\" = V.\"Sede\" \n" +
+                " AND\tV.\"Data\" BETWEEN (S.\"DataReazione\" - INTERVAL '2 month') AND S.\"DataReazione\"";
+
+
         try {
-            Statement vaccineStatement = connectDB.createStatement();
-            ResultSet vaccineQueryOutput = vaccineStatement.executeQuery(vaccineQuery);
+            PreparedStatement vaccineStatement = connectDB.prepareStatement(vaccineQuery);
+            Integer repId = Integer.valueOf(reportId);
+            vaccineStatement.setInt(1,repId);
+            //vaccineStatement.setString(2,date);
+            ResultSet vaccineQueryOutput = vaccineStatement.executeQuery();
             while (vaccineQueryOutput.next()) {
 
                 //il parametro di getString è una stringa che riporta il nome esatto della colonna all'interno del Database su pSQL
-                String queryVaccineName = vaccineQueryOutput.getString("vaccino");
-                String queryType = vaccineQueryOutput.getString("tipo");
-                String queryLocality = vaccineQueryOutput.getString("sede");
-                String queryDate = vaccineQueryOutput.getString("data");
+                String queryVaccineName = vaccineQueryOutput.getString("Nome");
+                String queryType = vaccineQueryOutput.getString("Tipo");
+                String querySite = vaccineQueryOutput.getString("Sede");
+                String queryCity = vaccineQueryOutput.getString("Provincia");
+                String queryDate = vaccineQueryOutput.getString("DataVaccino");
 
 
-                vaccineModelObservableList.add(new VaccineModel(queryVaccineName, queryType, queryLocality,queryDate));
+                vaccinationModelObservableList.add(new VaccinationModel(queryVaccineName, queryType, querySite, queryCity,queryDate));
                 //PropertyValueFactory corrisponde agli stessi campi della classe ...Model
                 vaccineNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
                 typeColumn.setCellValueFactory(new PropertyValueFactory<>("type"));
-                localityColumn.setCellValueFactory(new PropertyValueFactory<>("locality"));
+                localityColumn.setCellValueFactory(new PropertyValueFactory<>("site"));
+                cityColumn.setCellValueFactory(new PropertyValueFactory<>("city"));
                 dateColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-                vaccineTable.setItems(vaccineModelObservableList);
+                vaccineTable.setItems(vaccinationModelObservableList);
 
-                FilteredList<VaccineModel> filteredVaccineTableData = new FilteredList<>(vaccineModelObservableList, b -> true);
+                FilteredList<VaccinationModel> filteredVaccineTableData = new FilteredList<>(vaccinationModelObservableList, b -> true);
 
                 vaccineDataTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-                    filteredVaccineTableData.setPredicate(VaccineModel -> {
+                    filteredVaccineTableData.setPredicate(VaccinationModel -> {
                         if (newValue.isEmpty() || newValue.isBlank() || newValue == null) {
                             return true; //C'è un match
                         }
                         String searchKeyword = newValue.toLowerCase();
-                        if (VaccineModel.getName().toLowerCase().indexOf(searchKeyword) > -1) {
+                        if (VaccinationModel.getName().toLowerCase().indexOf(searchKeyword) > -1) {
                             return true;
-                        } else if (VaccineModel.getType().toLowerCase().indexOf(searchKeyword) > -1) {
-                            return true;
-
-                        } else if (VaccineModel.getLocality().toLowerCase().indexOf(searchKeyword) > -1) {
+                        } else if (VaccinationModel.getType().toLowerCase().indexOf(searchKeyword) > -1) {
                             return true;
 
-                        } else if (VaccineModel.getDate().toLowerCase().indexOf(searchKeyword) > -1) {
+                        } else if (VaccinationModel.getSite().toLowerCase().indexOf(searchKeyword) > -1) {
+                            return true;
+
+                        } else if (VaccinationModel.getCity().toLowerCase().indexOf(searchKeyword) > -1) {
+                            return true;
+
+                        }else if (VaccinationModel.getDate().toLowerCase().indexOf(searchKeyword) > -1) {
                             return true;
 
                         }else {
@@ -135,7 +156,7 @@ public class ReportDetailsController extends DocController implements Initializa
                         }
                     });
                 });
-                SortedList<VaccineModel> sortedVaccineTableData = new SortedList<>(filteredVaccineTableData);
+                SortedList<VaccinationModel> sortedVaccineTableData = new SortedList<>(filteredVaccineTableData);
                 sortedVaccineTableData.comparatorProperty().bind(vaccineTable.comparatorProperty());
                 vaccineTable.setItems(sortedVaccineTableData);
             }
@@ -148,56 +169,70 @@ public class ReportDetailsController extends DocController implements Initializa
         }
     }
 
-    public void updateReportDetails(DocAdverseReactionTableModel adverseReactionInfo, ReportsTableModel reportInfo){
-        setReportId(reportInfo.getReportId());
-        System.out.println(reportInfo.getReportId());
-        setDescription(adverseReactionInfo.getDescription());
-        System.out.println(adverseReactionInfo.getDescription());
-        setGravity(adverseReactionInfo.getGravityLevel());
-        System.out.println(adverseReactionInfo.getGravityLevel());
-        setDoctorId(reportInfo.getDoctorId());
-        System.out.println(reportInfo.getDoctorId());
-        setAdReactionDate(reportInfo.getAdReactionDate());
-        System.out.println(reportInfo.getAdReactionDate());
+    public void initializeView(ArrayList<String> arrayList, String description, String gravity){
+
+        descriptionArea.setText(description);
+        gravityArea.setText(gravity);
+        reportIdArea.setText(arrayList.get(0));
+        adReactionDateArea.setText(arrayList.get(3));
+        doctorIdArea.setText(arrayList.get(2));
     }
 
-    public Text getReportId() {
-        return reportId;
+
+    /*
+    public void updateReportDetails(DocAdverseReactionTableModel adverseReactionInfo, TableModel reportInfo){
+        setReportIdArea(reportInfo.arrayList.get(0));
+        //System.out.println(reportInfo.getReportIdArea());
+        setDescriptionArea(adverseReactionInfo.getDescriptionArea());
+        //System.out.println(adverseReactionInfo.getDescriptionArea());
+        setGravityArea(adverseReactionInfo.getGravityLevel());
+        //System.out.println(adverseReactionInfo.getGravityLevel());
+        setDoctorIdArea(reportInfo.arrayList.get(5));
+        //System.out.println(reportInfo.getDoctorIdArea());
+        setAdReactionDateArea(reportInfo.arrayList.get(3));
+        //System.out.println(reportInfo.getAdReactionDateArea());
+    }
+*/
+
+
+
+    public Text getReportIdArea() {
+        return reportIdArea;
     }
 
-    public TextArea getDescription() {
-        return description;
+    public TextArea getDescriptionArea() {
+        return descriptionArea;
     }
 
-    public Text getDoctorId() {
-        return doctorId;
+    public Text getDoctorIdArea() {
+        return doctorIdArea;
     }
 
-    public Text getGravity() {
-        return gravity;
+    public Text getGravityArea() {
+        return gravityArea;
     }
 
-    public Text getAdReactionDate() {
-        return adReactionDate;
+    public Text getAdReactionDateArea() {
+        return adReactionDateArea;
     }
 
-    public void setReportId(String reportId) {
-        this.reportId.setText(reportId);
+    public void setReportIdArea(String reportIdArea) {
+        this.reportIdArea.setText(reportIdArea);
     }
 
-    public void setDescription(String description) {
-        this.description.setText(description);
+    public void setDescriptionArea(String descriptionArea) {
+        this.descriptionArea.setText(descriptionArea);
     }
 
-    public void setDoctorId(String doctorId) {
-        this.doctorId.setText(doctorId);
+    public void setDoctorIdArea(String doctorIdArea) {
+        this.doctorIdArea.setText(doctorIdArea);
     }
 
-    public void setGravity(Integer gravity) {
-        this.gravity.setText(gravity.toString());
+    public void setGravityArea(Integer gravityArea) {
+        this.gravityArea.setText(gravityArea.toString());
     }
 
-    public void setAdReactionDate(String adReactionDate) {
-        this.adReactionDate.setText(adReactionDate);
+    public void setAdReactionDateArea(String adReactionDateArea) {
+        this.adReactionDateArea.setText(adReactionDateArea);
     }
 }

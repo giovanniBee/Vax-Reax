@@ -29,6 +29,6 @@ public class WarningTask extends TimerTask {
         }
         String nodeMessage = "Sono arrivate più di 50 segnalazioni questa settimana!";
         FarmaController farmaController = loader.getController();
-        farmaController.setReportMessage(nodeMessage);
+        //farmaController.setReportMessage(nodeMessage);
     }
 }

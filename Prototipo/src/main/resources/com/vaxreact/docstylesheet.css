@@ -1,0 +1,8 @@
+.button {
+    -fx-font-size: 12px;
+}
+.button:hover{
+    opacity: 1;
+    -fx-font-size: 13px;
+}
+

@@ -5,6 +5,9 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
@@ -24,19 +27,11 @@
    <children>
       <BorderPane layoutX="114.0" layoutY="54.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
-            <AnchorPane prefHeight="65.0" prefWidth="200.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="65.0" prefWidth="200.0" style="fx-border-style: solid solid none solid;" BorderPane.alignment="CENTER">
                <children>
-                  <Pane layoutX="102.0" layoutY="20.0" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: #263F73;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox maxWidth="1.7976931348623157E308" prefHeight="51.0" prefWidth="378.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
                      <children>
-                        <ImageView fx:id="exit" fitHeight="15.0" fitWidth="15.0" layoutX="777.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@exit.png" />
-                           </image>
-                        </ImageView>
-                     </children></Pane>
-                  <HBox layoutX="275.0" layoutY="1.0" prefHeight="43.0" prefWidth="525.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
-                     <children>
-                        <JFXButton fx:id="reportHighButton" onAction="#reportHighButtonOnActon" prefHeight="40.0" prefWidth="136.0" ripplerFill="WHITE" style="-fx-background-color: WHITE;" text="Report" textFill="#554444">
+                        <JFXButton fx:id="reportHighButton" maxWidth="1.7976931348623157E308" onAction="#reportHighButtonOnActon" prefHeight="51.0" prefWidth="184.0" ripplerFill="WHITE" style="-fx-background-color: WHITE;" text="New Reports" textFill="#554444">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -45,7 +40,7 @@
                               </ImageView>
                            </graphic>
                         </JFXButton>
-                        <JFXButton fx:id="viewPatientsHighButton" onAction="#viewPatientsHighButtonOnActon" prefHeight="40.0" prefWidth="136.0" ripplerFill="WHITE" style="-fx-background-color: WHITE;" text="View Patients" textFill="#554444">
+                        <JFXButton fx:id="viewReportsHighButton" maxWidth="1.7976931348623157E308" onAction="#viewReportsHighButtonOnActon" prefHeight="51.0" prefWidth="182.0" ripplerFill="WHITE" style="-fx-background-color: WHITE;" text="Reports" textFill="#554444">
                            <graphic>
                               <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -54,6 +49,7 @@
                               </ImageView>
                            </graphic>
                         </JFXButton>
+                        <JFXButton fx:id="patientsInfoHighButton" maxWidth="1.7976931348623157E308" onAction="#patientsInfoHighButtonOnAction" prefHeight="51.0" prefWidth="160.0" ripplerFill="WHITE" style="-fx-background-color: WHITE;" text="Patients's info" textFill="#554444" />
                      </children></HBox>
                   <Label fx:id="menu" layoutX="14.0" layoutY="30.0" prefHeight="20.0" prefWidth="82.0" text="MENU" textFill="#c3c3c3">
                      <font>
@@ -67,49 +63,67 @@
                         </ImageView>
                      </graphic>
                   </Label>
-                  <Label fx:id="menuBack" layoutX="14.0" layoutY="30.0" prefHeight="20.0" prefWidth="82.0" text="MENU" textFill="#c3c3c3">
+                  <Label fx:id="menuBack" layoutX="14.0" layoutY="30.0" prefHeight="20.0" prefWidth="82.0" style="-fx-background-color: transparent;" text="MENU" textFill="#c3c3c3">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView disable="true" fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@menu.png" />
                            </image>
                         </ImageView>
                      </graphic>
                   </Label>
+                  <MenuBar prefHeight="26.0" prefWidth="800.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <menus>
+                      <Menu mnemonicParsing="false" text="User">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="Close" />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="About" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
                </children>
             </AnchorPane>
          </top>
          <left>
-            <AnchorPane fx:id="slider" prefHeight="435.0" prefWidth="175.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
+            <AnchorPane fx:id="slider" prefHeight="450.0" prefWidth="173.0" style="-fx-background-color: #263F73;" BorderPane.alignment="CENTER">
                <children>
                   <ImageView fitHeight="158.0" fitWidth="156.0" layoutX="10.0" layoutY="267.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@logo2.PNG" />
                      </image>
                   </ImageView>
-                  <JFXButton fx:id="reportButton" alignment="BASELINE_CENTER" layoutX="18.0" layoutY="73.0" onAction="#reportButtonOnAction" prefHeight="38.0" prefWidth="175.0" ripplerFill="WHITE" style="-fx-background-color: #263F73;" text="Report" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <JFXButton fx:id="reportButton" alignment="BASELINE_CENTER" layoutY="55.0" onAction="#reportButtonOnAction" prefHeight="38.0" prefWidth="175.0" ripplerFill="WHITE" style="-fx-background-color: #263F73;" text="New Reports" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </JFXButton>
-                  <JFXButton fx:id="viewPatientsButton" alignment="BASELINE_CENTER" contentDisplay="CENTER" layoutX="5.0" layoutY="175.0" onAction="#viewPatientsButtonOnAction" prefHeight="38.0" prefWidth="175.0" ripplerFill="WHITE" style="-fx-background-color: #263F73;" text="View patients" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <JFXButton fx:id="viewPatientsButton" alignment="BASELINE_CENTER" contentDisplay="CENTER" layoutY="130.0" onAction="#viewPatientsButtonOnAction" prefHeight="38.0" prefWidth="175.0" ripplerFill="WHITE" style="-fx-background-color: #263F73;" text="Reports" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <font>
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </JFXButton>
-                  <ImageView fitHeight="71.0" fitWidth="30.0" layoutX="8.0" layoutY="76.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="71.0" fitWidth="30.0" layoutX="8.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@report4.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="8.0" layoutY="177.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="8.0" layoutY="132.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@visualizza4.png" />
                      </image>
                   </ImageView>
+                  <JFXButton fx:id="patientsButton" layoutY="215.0" onAction="#patientsInfoButtonOnAction" prefHeight="38.0" prefWidth="175.0" style="-fx-background-color: #263F73;" text="Patients's info" textFill="WHITE" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <font>
+                        <Font name="System Bold" size="15.0" />
+                     </font></JFXButton>
                </children>
             </AnchorPane>
          </left>
@@ -124,18 +138,20 @@
                            </children>
                         </VBox>
                      </children></Pane>
-                  <Pane fx:id="patientsView" prefHeight="200.0" prefWidth="200.0">
+                  <Pane fx:id="reportsView" prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <Label layoutX="49.0" layoutY="32.0" text="Search" />
                         <TextField fx:id="reportsTextField" layoutX="96.0" layoutY="29.0" promptText="Patients ID" />
                         <TableView fx:id="reportsTable" editable="true" layoutY="66.0" prefHeight="368.0" prefWidth="625.0">
                           <columns>
-                            <TableColumn fx:id="reportIdColumn" prefWidth="50.0" text="Report ID" />
-                              <TableColumn fx:id="patientIdReportsColumn" prefWidth="74.8" text="Patient ID" />
-                              <TableColumn fx:id="adverseReactionReportsColumn" prefWidth="125.0" text="Adverse reaction" />
-                              <TableColumn fx:id="adverseReactionDateColumn" prefWidth="125.0" text="Adv.reaction date" />
-                              <TableColumn fx:id="reportDateColumn" prefWidth="125.0" text="Report date" />
-                              <TableColumn fx:id="doctorIdColumn" prefWidth="125.0" text="Doctor ID" />
+                            <TableColumn fx:id="reportId" prefWidth="50.0" text="Report ID" />
+                              <TableColumn fx:id="adReactionDate" prefWidth="125.0" text="Adv. reaction date" />
+                              <TableColumn fx:id="adverseReaction" prefWidth="125.0" text="Adverse reaction" />
+                              <TableColumn fx:id="patientId" prefWidth="74.8" text="Patient ID" />
+                              <TableColumn fx:id="doctorId" prefWidth="125.0" text="Doctor ID" />
+                              <TableColumn fx:id="reportDate" prefWidth="125.0" text="Report date" />
+                              <TableColumn fx:id="gravity" prefWidth="75.0" text="Gravity" />
+                              <TableColumn fx:id="description" prefWidth="75.0" text="Description" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -146,7 +162,7 @@
                         </TableView>
                      </children>
                   </Pane>
-                  <Pane fx:id="reportView" prefHeight="200.0" prefWidth="200.0">
+                  <Pane fx:id="newReportView" prefHeight="200.0" prefWidth="200.0">
                      <children>
                         <Label layoutY="33.0" prefWidth="40.0" text="Search" />
                         <TextField fx:id="patientIdTextField" layoutX="40.0" layoutY="29.0" prefHeight="26.0" prefWidth="100.0" />
@@ -154,31 +170,54 @@
                         <Label layoutX="156.0" layoutY="33.0" prefWidth="40.0" text="Search" />
                         <TableView fx:id="patientIdTable" layoutY="66.0" prefHeight="150.0" prefWidth="208.3">
                           <columns>
-                            <TableColumn fx:id="patientIdColumn" prefWidth="208.3" text="Patient ID" />
+                              <TableColumn fx:id="id" prefWidth="208.3" text="Patient ID" />
                           </columns>
                         </TableView>
                         <TableView fx:id="adverseReactionTable" layoutX="208.3" layoutY="66.0" prefHeight="150.0" prefWidth="208.3">
                           <columns>
-                            <TableColumn fx:id="adverseReactionColumn" prefWidth="208.3" text="Adverse Reaction" />
+                            <TableColumn fx:id="name" prefWidth="208.3" text="Adverse Reaction" />
                           </columns>
                         </TableView>
-                        <Text fx:id="commitPatientID" fill="#5cd15e" layoutX="20.0" layoutY="239.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="190.38303565979004" />
-                        <Text fx:id="commitAdverseReaction" fill="#5cd15e" layoutX="217.0" layoutY="238.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="190.38303565979004" />
+                        <Text fx:id="commitPatientID" fill="#5cd15e" layoutX="20.0" layoutY="240.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="190.38303565979004" />
+                        <Text fx:id="commitAdverseReaction" fill="#5cd15e" layoutX="217.0" layoutY="240.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="190.38303565979004" />
                         <Button fx:id="sendReportButton" layoutX="520.0" layoutY="379.0" mnemonicParsing="false" style="-fx-background-color: #263F73;" text="Send report" textFill="WHITE" />
-                        <Label fx:id="checkCommitLabel" layoutX="19.0" layoutY="385.0" prefHeight="18.0" prefWidth="378.0" textFill="#c32f15">
+                        <Label fx:id="checkCommitLabel" layoutX="20.0" layoutY="385.0" prefHeight="18.0" prefWidth="378.0" textFill="#c32f15">
                            <font>
                               <Font name="System Bold" size="13.0" />
                            </font></Label>
                         <TextField fx:id="commitAdReactionDate" layoutX="422.0" layoutY="190.0" promptText="YYYY-MM-DD " />
                         <Label layoutX="421.0" layoutY="172.0" prefHeight="18.0" prefWidth="147.0" text="Adverse reaction date:" />
-                        <ChoiceBox fx:id="choiceBox" layoutX="421.0" layoutY="84.0" prefHeight="27.0" prefWidth="73.0" />
-                        <Label layoutX="421.0" layoutY="66.0" prefHeight="18.0" prefWidth="198.0" text="Adverse reaction gravity level:" />
-                        <TextArea fx:id="descriptionArea" layoutX="14.0" layoutY="254.0" prefHeight="125.0" prefWidth="350.0" promptText="A brief description of adverse reaction" />
+                        <Label layoutX="421.0" layoutY="66.0" prefHeight="18.0" prefWidth="198.0" text="Adverse reaction gravityArea level:" />
+                        <ChoiceBox fx:id="choiceBox" layoutX="421.0" layoutY="95.0" prefHeight="27.0" prefWidth="98.0" />
+                        <TextArea fx:id="descriptionArea" layoutX="20.0" layoutY="250.0" prefHeight="103.0" prefWidth="388.0" promptText="A brief descriptionArea of the adverse reaction" />
+                     </children>
+                  </Pane>
+                  <Pane fx:id="patientsInfoView" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <TableView fx:id="patientsInfoTable" layoutY="55.0" prefWidth="625.0">
+                          <columns>
+                            <TableColumn fx:id="patientIdPatientsInfoColumn" prefWidth="125.0" text="Patient ID" />
+                            <TableColumn fx:id="dateOfBirthColumn" prefWidth="125.0" text="Anno di Nascita" />
+                              <TableColumn fx:id="residenceColumn" prefWidth="125.0" text="Residenza" />
+                              <TableColumn fx:id="professionColumn" prefWidth="125.0" text="Professione" />
+                              <TableColumn fx:id="adverseReactionsColumn" prefWidth="125.0" text="Reazioni Avverse" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                        <Label layoutX="14.0" layoutY="23.0" prefHeight="18.0" prefWidth="48.0" text="Search:" />
+                        <TextField fx:id="patientsInfoTextField" layoutX="62.0" layoutY="19.0" prefHeight="26.0" prefWidth="103.0" promptText="Patient's data" />
                      </children>
                   </Pane>
                </children>
             </StackPane>
          </center>
       </BorderPane>
+      <ImageView fx:id="exit" fitHeight="15.0" fitWidth="21.0" layoutX="780.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true" scaleX="1.2" scaleY="1.2" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0">
+         <image>
+            <Image url="@exit.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="patientInfoStage" prefHeight="500.0" prefWidth="645.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.vaxreact.PatientInfoDetailsController">
+   <children>
+      <TableView fx:id="riskFactorsTable" layoutX="319.0" layoutY="68.0" prefHeight="215.0" prefWidth="309.0">
+        <columns>
+          <TableColumn fx:id="riskFactorName" prefWidth="154.5" text="Risk factors" />
+            <TableColumn fx:id="riskFactorLevel" prefWidth="154.5" text="Level" />
+        </columns>
+      </TableView>
+      <TableView fx:id="vaccinesHistoryTable" layoutX="14.0" layoutY="326.0" prefHeight="158.0" prefWidth="615.0">
+         <columns>
+            <TableColumn fx:id="vaccineName" prefWidth="153.75" text="Name" />
+            <TableColumn fx:id="vaccineType" prefWidth="153.75" text="Type" />
+            <TableColumn fx:id="vaccineSite" prefWidth="153.75" text="Site" />
+            <TableColumn fx:id="vaccineData" prefWidth="153.75" text="Data" />
+         </columns>
+      </TableView>
+      <Label layoutX="14.0" layoutY="14.0" prefHeight="27.0" prefWidth="215.0" text="Cartella clinica paziente:">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Text fx:id="patientIdText" layoutX="229.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="68.13671875" />
+      <Label layoutX="14.0" layoutY="262.0" prefHeight="21.0" prefWidth="168.0" text="Storia vaccinale paziente">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Text layoutX="14.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Di seguito viene riportata l'anamnesi ambulatoriale certificata dal medico generale avente in cura il suddetto paziente. " wrappingWidth="221.5999633789063">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Text>
+      <TextField fx:id="vaccineDataTextField" layoutX="125.0" layoutY="291.0" promptText="Vaccines'sdata" />
+      <TextField fx:id="riskFactorDataTextField" layoutX="436.0" layoutY="35.0" promptText="Risk factors's data" />
+      <Label layoutX="77.0" layoutY="295.0" prefHeight="17.0" prefWidth="47.0" text="Search:" />
+      <Label layoutX="388.0" layoutY="39.0" prefHeight="17.0" prefWidth="47.0" text="Search:" />
+   </children>
+</AnchorPane>

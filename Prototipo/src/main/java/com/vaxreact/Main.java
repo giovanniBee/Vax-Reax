@@ -7,8 +7,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Calendar;
+import java.util.Properties;
 import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
@@ -17,10 +20,15 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         //esegue un controllo sull'invio delle notifiche del sabato pomeriggio
         runWarningTask();
+
         Parent root = FXMLLoader.load(getClass().getResource("login.fxml"));
         stage.initStyle(StageStyle.UNDECORATED);
        // stage.setTitle("Login page");
-        stage.setScene(new Scene(root,520,400));
+        Scene scene = new Scene(root,520,400);
+        scene.getStylesheets().add(getClass().getResource("stylesheet.css").toExternalForm());
+        stage.setScene(scene);
+
+        
         stage.show();
     }
 
